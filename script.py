@@ -44,8 +44,8 @@ while True :
     cv2.imshow("face detection", img)
     img_id += 1
 
-    k = cv2.waitKey(0)
-    if k is None and k & 0xFF == ord('q'):
+
+    if cv2.waitKey(0) & 0xFF == ord('q'):
         break
 
 vid_cap.release()
