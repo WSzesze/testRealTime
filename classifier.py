@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image
+# os module for reading training data directories and path
 import os
 import cv2
 
