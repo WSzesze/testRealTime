@@ -9,9 +9,8 @@ if cap.isOpened():
         while True:
             ret_val, img = cap.read()
             #cv2.rectangle(img,(0,0),(500,1080),(0,0,0),-1)
-            pts = np.array([[10, 5], [20, 30], [70, 20], [50, 10]], np.int32)
-            pts = pts.reshape((-1, 1, 2))
-            cv2.polylines(img, [pts], True, (0, 255, 255))
+            rectangle = np.array([[0,0],[320,0],[1200,1000],[0,1980]])
+            cv2.fillConvexPoly(img, rectangle, (0,0,0))
             cv2.imshow('demo',img)
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
