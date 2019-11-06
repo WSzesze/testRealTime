@@ -1,0 +1,40 @@
+
+
+@app.route('/cell_1')
+def cell1():
+    return Response(cell_1(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/cell_2')
+def cell2():
+    return Response(cell_2(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/cell_3')
+def cell3():
+    return Response(cell_3(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/cell_4')
+def cell4():
+    return Response(cell_4(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/cell_5')
+def cell5():
+    return Response(cell_5(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/cell_6')
+def cell6():
+    return Response(cell_6(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/cell_7')
+def cell7():
+    return Response(cell_7(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/cell_8')
+def cell8():
+    return Response(cell_8(), mimetype='multipart/x-mixed-replace; boundary=frame')
