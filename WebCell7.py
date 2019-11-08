@@ -27,21 +27,23 @@ app = Flask(__name__)
 # initialize the video stream and allow the camera sensor to
 # warmup
 # vs = VideoStream(usePiCamera=1).start()
-vs = VideoStream(src="rtsp://192.168.1.102:554/ch1/main/av_stream").start()
+#vs7 = VideoStream(src="rtsp://192.168.1.102:554/ch1/main/av_stream").start()
+vs = VideoStream(src=0).start()
 time.sleep(2.0)
 
 
-@app.route("/")
+
+
+@app.route("/cell7")
 def index():
     # return the rendered template
     return render_template("index.html")
 
 
-def detect_motion(frameCount):
+def detect_motion_c7(frameCount):
     # grab global references to the video stream, output frame, and
     # lock variables
     global vs, outputFrame, lock
-
 
     # loop over frames from the video stream
     while True:
@@ -50,13 +52,11 @@ def detect_motion(frameCount):
         frame = vs.read()
         frame = imutils.resize(frame, width=1000)
 
-
         # grab the current timestamp and draw it on the frame
         timestamp = datetime.datetime.now()
         cv2.putText(frame, timestamp.strftime(
             "%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
-
 
         # acquire the lock, set the output frame, and release the
         # lock
@@ -78,7 +78,7 @@ def generate():
             if outputFrame is None:
                 continue
 
-            pts = np.array([[235,278], [468, 295], [335, 445], [75,398]], np.int32)
+            pts = np.array([[235, 278], [468, 295], [335, 445], [85, 385]], np.int32)
             cv2.polylines(outputFrame, [pts], True, (0, 255, 255), 3)
             font = cv2.FONT_HERSHEY_SIMPLEX
             cv2.putText(outputFrame, 'Cell 7', (250, 478), font, 1.0, (0, 0, 0), 2, cv2.LINE_AA)
@@ -102,27 +102,29 @@ def video_feed():
                     mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
-# check to see if this is the main thread of execution
-if __name__ == '__main__':
-    # construct the argument parser and parse command line arguments
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--ip", type=str, required=True,
-                    help="ip address of the device")
-    ap.add_argument("-o", "--port", type=int, required=True,
-                    help="ephemeral port number of the server (1024 to 65535)")
-    ap.add_argument("-f", "--frame-count", type=int, default=32,
-                    help="# of frames used to construct the background model")
-    args = vars(ap.parse_args())
-
-    # start a thread that will perform motion detection
-    t = threading.Thread(target=detect_motion, args=(
-        args["frame_count"],))
-    t.daemon = True
-    t.start()
-
-    # start the flask app
-    app.run(host=args["ip"], port=args["port"], debug=True,
-            threaded=True, use_reloader=False)
+# # check to see if this is the main thread of execution
+# if __name__ == '__main__':
+#     # construct the argument parser and parse command line arguments
+#     ap = argparse.ArgumentParser()
+#     ap.add_argument("-i", "--ip", type=str, required=True,
+#                     help="ip address of the device")
+#     ap.add_argument("-o", "--port", type=int, required=True,
+#                     help="ephemeral port number of the server (1024 to 65535)")
+#     ap.add_argument("-f", "--frame-count", type=int, default=32,
+#                     help="# of frames used to construct the background model")
+#     args = vars(ap.parse_args())
+#
+#     # start a thread that will perform motion detection
+#     t = threading.Thread(target=detect_motion, args=(
+#         args["frame_count"],))
+#     t.daemon = True
+#     t.start()
+#
+#     # start the flask app
+#     app.run(host=args["ip"], port=args["port"], debug=True,
+#             threaded=True, use_reloader=False)
 
 # release the video stream pointer
 vs.stop()
+
+

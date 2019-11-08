@@ -27,29 +27,29 @@ app = Flask(__name__)
 # initialize the video stream and allow the camera sensor to
 # warmup
 # vs = VideoStream(usePiCamera=1).start()
-vs = VideoStream(src="rtsp://192.168.1.102:554/ch1/main/av_stream").start()
+#vs = VideoStream(src="rtsp://192.168.1.102:554/ch1/main/av_stream").start()
+vs = VideoStream(src=0).start()
 time.sleep(2.0)
 
 
-@app.route("/")
+@app.route("/cell6")
 def index():
     # return the rendered template
     return render_template("index.html")
 
 
-def detect_motion(frameCount):
-    # grab global references to the video stream, output frame, and
-    # lock variables
+
+def generate():
+    # grab global references to the output frame and lock variables
     global vs, outputFrame, lock
 
-
-    # loop over frames from the video stream
+    # loop over frames from the output stream
     while True:
+
         # read the next frame from the video stream, resize it,
         # convert the frame to grayscale, and blur it
         frame = vs.read()
         frame = imutils.resize(frame, width=1000)
-
 
         # grab the current timestamp and draw it on the frame
         timestamp = datetime.datetime.now()
@@ -57,19 +57,10 @@ def detect_motion(frameCount):
             "%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
-
         # acquire the lock, set the output frame, and release the
         # lock
         with lock:
             outputFrame = frame.copy()
-
-
-def generate():
-    # grab global references to the output frame and lock variables
-    global outputFrame, lock
-
-    # loop over frames from the output stream
-    while True:
 
         # wait until the lock is acquired
         with lock:
@@ -115,10 +106,10 @@ if __name__ == '__main__':
     args = vars(ap.parse_args())
 
     # start a thread that will perform motion detection
-    t = threading.Thread(target=detect_motion, args=(
-        args["frame_count"],))
-    t.daemon = True
-    t.start()
+    # t = threading.Thread(target=generate(), args=(
+    #     args["frame_count"],))
+    # t.daemon = True
+    # t.start()
 
     # start the flask app
     app.run(host=args["ip"], port=args["port"], debug=True,
